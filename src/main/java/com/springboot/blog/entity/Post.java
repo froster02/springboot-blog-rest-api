@@ -30,6 +30,9 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generates the ID value.
     private Long id;
 
+    @Version
+    @Column(name = "version", nullable = false)
+    private Integer version = 0;
     /**
      * The title of the post.
      * This field is mapped to the "title" column in the database and cannot be null.
