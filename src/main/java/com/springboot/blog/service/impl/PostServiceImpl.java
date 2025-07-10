@@ -48,9 +48,14 @@ public class PostServiceImpl implements PostService {
 
     //Paginated response for posts
     @Override
-    public PostResponse getAllPosts(int pageNo, int pageSize, String sortBy) {
+    public PostResponse getAllPosts(int pageNo, int pageSize, String sortBy, String sortDir) {
+
+        // Default sort direction is ascending
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.DESC.name()) ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+
         // Create pageable instance with sorting
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        // Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Post> posts = postRepository.findAll(pageable);
 
         List<Post> listOfPosts = posts.getContent();
