@@ -2,12 +2,14 @@ package com.springboot.blog.service.impl;
 
 import com.springboot.blog.entity.Post;
 import com.springboot.blog.exception.ResourceNotFoundException;
+import com.springboot.blog.payload.PostResponse;
 import com.springboot.blog.repository.PostRepository;
 import com.springboot.blog.service.PostService;
 import com.springboot.blog.payload.PostDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,12 +38,36 @@ public class PostServiceImpl implements PostService {
 //        return posts.stream().map (post -> mapToDTO(post)).collect(Collectors.toList());
 //    }
 
+//    @Override
+//    public List<PostDto> getAllPosts(int pageNo, int pageSize) {
+//        Pageable pageable = PageRequest.of(pageNo, pageSize);
+//        Page<Post> posts = postRepository.findAll(pageable);
+//        List<Post> listOfPosts = posts.getContent();
+//        return listOfPosts.stream().map(this::mapToDTO).collect(Collectors.toList());
+//    }
+
+    //Paginated response for posts
     @Override
-    public List<PostDto> getAllPosts(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+    public PostResponse getAllPosts(int pageNo, int pageSize, String sortBy) {
+        // Create pageable instance with sorting
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         Page<Post> posts = postRepository.findAll(pageable);
+
         List<Post> listOfPosts = posts.getContent();
-        return listOfPosts.stream().map(this::mapToDTO).collect(Collectors.toList());
+
+        List<PostDto> content = listOfPosts.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(content);
+        postResponse.setPageNo(posts.getNumber());
+        postResponse.setPageSize(posts.getSize());
+        postResponse.setTotalElements(postResponse.getTotalElements());
+        postResponse.setTotalPages(postResponse.getTotalPages());
+        postResponse.setLastPage(posts.isLast());
+
+        return postResponse;
     }
 
     @Override
