@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Represents a blog post entity mapped to the "posts" table in the database.
  * This class uses JPA annotations for ORM mapping and Lombok annotations
@@ -53,4 +56,7 @@ public class Post {
      */
     @Column(name = "content", nullable = false)
     private String content;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Comment> comments = new HashSet<>();
 }
