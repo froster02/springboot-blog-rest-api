@@ -12,9 +12,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v3
         with:
-          java-version: '17'   # Change to your Java version if needed
+          distribution: 'temurin'   # You can use 'temurin', 'adopt', 'zulu', etc.
+          java-version: '17'        # Use your project's required Java version
 
       - name: Generate Javadoc
         run: ./generate-docs.sh
