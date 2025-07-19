@@ -1,0 +1,29 @@
+name: Build & Update Javadoc
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'   # Change to your Java version if needed
+
+      - name: Generate Javadoc
+        run: ./generate-docs.sh
+
+      - name: Commit and Push Docs
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add docs/
+          git commit -m "Automated docs update [skip ci]" || echo "No changes to commit"
+          git push
+
