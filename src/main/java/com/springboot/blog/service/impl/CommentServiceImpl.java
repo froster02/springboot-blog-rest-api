@@ -89,7 +89,7 @@ public class CommentServiceImpl implements CommentService {
         // Update the comment fields
 
         comment.setName(commentRequest.getName());
-        comment.setName(commentRequest.getEmail());
+        comment.setEmail(commentRequest.getEmail());
         comment.setBody(commentRequest.getBody());
 
         Comment updatedComment = commentRepository.save(comment);
