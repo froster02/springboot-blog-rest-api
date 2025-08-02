@@ -179,3 +179,6 @@ The API includes robust error handling for common scenarios:
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+<img width="4844" height="3278" alt="image" src="https://github.com/user-attachments/assets/cb3b1e16-5fbb-435e-a267-edb4e57a5600" />
+
