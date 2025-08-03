@@ -14,7 +14,7 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable()) // Disables CSRF using the new lambda-based API
                 .authorizeHttpRequests(authorize ->
-                        authorize.anyRequest().authenticated() // Requires authentication for any request
+                        authorize.anyRequest().authenticated() // Requires authentication for any HTTP request
                 )
                 .httpBasic(Customizer.withDefaults()); // Enables basic auth with default config
 
