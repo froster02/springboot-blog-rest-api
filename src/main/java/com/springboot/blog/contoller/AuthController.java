@@ -1,0 +1,30 @@
+package com.springboot.blog.contoller;
+
+import com.springboot.blog.payload.LoginDto;
+import com.springboot.blog.payload.LoginResponse;
+import com.springboot.blog.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+
+    @Autowired
+    private AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
+    //Build Login REST API
+    @PostMapping(value = {"/login", "/signin"})
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginDto loginDto) {
+        LoginResponse response = authService.login(loginDto);
+        return ResponseEntity.ok(response);
+    }
+}
