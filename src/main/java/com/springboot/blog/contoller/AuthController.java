@@ -2,8 +2,10 @@ package com.springboot.blog.contoller;
 
 import com.springboot.blog.payload.LoginDto;
 import com.springboot.blog.payload.LoginResponse;
+import com.springboot.blog.payload.RegisterDto;
 import com.springboot.blog.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,4 +29,12 @@ public class AuthController {
         LoginResponse response = authService.login(loginDto);
         return ResponseEntity.ok(response);
     }
+
+    //Build Register REST API
+    @PostMapping(value = {"/register", "/signup"})
+    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
+        String response = authService.register(registerDto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
 }
