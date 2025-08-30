@@ -185,3 +185,10 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 <img width="4844" height="3278" alt="image" src="https://github.com/user-attachments/assets/cb3b1e16-5fbb-435e-a267-edb4e57a5600" />
 
+---
+
+## 📌 README Version
+<!-- README-VERSION -->
+Current version: v0
+<!-- END-README-VERSION -->
+
