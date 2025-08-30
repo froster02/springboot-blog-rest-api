@@ -1,11 +1,13 @@
 package com.springboot.blog.service.impl;
 
+import com.springboot.blog.entity.Category;
 import com.springboot.blog.entity.Post;
 import com.springboot.blog.exception.ResourceNotFoundException;
+import com.springboot.blog.payload.PostDto;
 import com.springboot.blog.payload.PostResponse;
+import com.springboot.blog.repository.CategoryRepository;
 import com.springboot.blog.repository.PostRepository;
 import com.springboot.blog.service.PostService;
-import com.springboot.blog.payload.PostDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,18 +23,30 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
 
-    private ModelMapper mapper;
+    private final ModelMapper mapper;
 
-    public PostServiceImpl(PostRepository postRepository, ModelMapper mapper){
+    private final CategoryRepository categoryRepository;
+
+    public PostServiceImpl(PostRepository postRepository, ModelMapper mapper,
+                           CategoryRepository categoryRepository) {
         this.postRepository = postRepository;
         this.mapper = mapper;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
     public PostDto createPost(PostDto postDto) {
+
+        Category category = categoryRepository.findById(postDto.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "id", postDto.getCategoryId()));
+
+        // convert DTO to entity
         Post post = mapToEntity(postDto);
-        post.setId(null);
+        post.setCategory(category);
         Post newPost = postRepository.save(post);
+
+        //convert entity to DTO
+        PostDto postResponse = mapToDTO(newPost);
         return mapToDTO(newPost);
     }
 
@@ -106,7 +120,7 @@ public class PostServiceImpl implements PostService {
     }
 
     // Helper method to convert Post entity to PostDto
-    private PostDto mapToDTO(Post post){
+    private PostDto mapToDTO(Post post) {
 
         PostDto postDto = mapper.map(post, PostDto.class);
 
@@ -121,14 +135,11 @@ public class PostServiceImpl implements PostService {
 
     //converted PostDto to Postentity
     private Post mapToEntity(PostDto postDto) {
-
-        Post post = mapper.map(postDto, Post.class);
-
-//        Post post = new Post();
-//        post.setTitle(postDto.getTitle());
-//        post.setDescription(postDto.getDescription());
-//        post.setContent(postDto.getContent());
-
+        Post post = new Post();
+        post.setTitle(postDto.getTitle());
+        post.setDescription(postDto.getDescription());
+        post.setContent(postDto.getContent());
+        // Don't set the ID - let JPA generate it
         return post;
     }
 
