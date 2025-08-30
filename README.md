@@ -168,6 +168,9 @@ The API includes robust error handling for common scenarios:
 - `updatePost(PostDto postDto, long id)` - Updates an existing post
 - `deletePostById(long id)` - Deletes a post by ID
 
+<!-- AUTO-GENERATED-API-DOCS -->
+<!-- END-AUTO-GENERATED-API-DOCS -->
+
 ## 🤝 Contributing
 
 1. Fork the repository
