@@ -52,22 +52,28 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        http.csrf(csrf -> csrf.disable()) // Disables CSRF using the new lambda-based API
+        // Configure HTTP security settings
+        http.csrf(csrf -> csrf.disable()) // Disable CSRF protection as we're using JWT
                 .authorizeHttpRequests(authorize ->
-//                        authorize.anyRequest().authenticated() // Requires authentication for any HTTP request
-                                authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
-//                                        .requestMatchers(HttpMethod.POST, "/api/categories/**").permitAll()
-                                        .requestMatchers("/api/auth/**").permitAll()
-                                        .requestMatchers("/swagger-ui/**").permitAll()
-                                        .requestMatchers("/v3/api-docs/**").permitAll()
-                                        .anyRequest().authenticated()
-                ).exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(authenticationEntryPoint)
-                ).sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        // Define URL authorization rules
+                        authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll() // Allow unauthenticated access to all GET endpoints under /api
+                                // Uncomment the line below to allow public access to POST /api/categories/**, if needed
+                                // .requestMatchers(HttpMethod.POST, "/api/categories/**").permitAll()
+                                .requestMatchers("/api/auth/**").permitAll() // Allow all auth endpoints (login/register) without authentication
+                                .requestMatchers("/swagger-ui/**").permitAll() // Allow access to Swagger UI
+                                .requestMatchers("/v3/api-docs/**").permitAll() // Allow access to OpenAPI documentation
+                                .anyRequest().authenticated() // Require authentication for all other requests
+                )
+                // Configure exception handling for authentication failures
+                .exceptionHandling(exception ->
+                        exception.authenticationEntryPoint(authenticationEntryPoint) // Custom entry point for handling auth exceptions
+                )
+                // Configure session management
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Use stateless session; no session will be created
                 );
 
+        // Add JWT token filter before the UsernamePasswordAuthenticationFilter
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
