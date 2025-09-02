@@ -189,6 +189,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📌 README Version
 <!-- README-VERSION -->
-Current version: v3
+Current version: v5
 <!-- END-README-VERSION -->
 
